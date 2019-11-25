@@ -6,7 +6,7 @@ from flask import url_for
 from flask import jsonify
 from datetime import timedelta, datetime, tzinfo, date
 import pymysql
-import json
+import sys
 
 app = Flask(__name__)
 
@@ -95,9 +95,10 @@ def calculate_salary_search():
         emp_empid = request.form['emp_empid']
         with conn:
             cur = conn.cursor()
-            sql="SELECT SUM(empt_wage) as empt_wage,  DATEADD(ms, SUM(DATEDIFF(ms, '00:00:00.000', empt_hr)), '00:00:00.000') as time   from employee LEFT JOIN employee_department ON empdp_empid = emp_empid LEFT JOIN employee_wage ON empl_empid = emp_empid LEFT JOIN employee_log_time ON empw_empid = empl_empid WHERE empt_date BETWEEN '"+date_start+"' AND '"+date_end+"' AND emp_empid = %s"
-            cur.execute(sql,(emp_empid))
-            result = cur.fetchall()
+            sql="SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( `empt_hr` ) ) ) AS timeSum, SUM(empt_wage) as empt_wage from employee_wage LEFT JOIN employee_log_time ON empw_empid = empl_empid WHERE empt_date BETWEEN '"+date_start+"' AND '"+date_end+"' AND empw_empid = "+emp_empid+" GROUP BY empw_date"
+            cur.execute(sql)
+            # print(sql,file=sys.stdout)
+            result = cur.fetchone()
             return render_template('calculate-salary-search.html',result=result)
 
 #หน้าเพิ่มข้อมูลพนักงาน

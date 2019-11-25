@@ -79,24 +79,22 @@
             </li>
             <li class="breadcrumb-item active">เงินเดือน</li>
         </ol>
-        {%  for row in result %}
          <!-- Page Content -->
          <div class="form-group">
               <div class="input-group col-md-12">
                   <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroup-sizing-sm">รวม</span>
                   </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.1}} ชั่วโมง" disabled>
+                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname"value="{{result[0]}} ชั่วโมง" disabled>
               </div>
               <br>
               <div class="input-group col-md-12">
                   <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroup-sizing-sm">เงินเดือน</span>
                   </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.0}} บาท" disabled>
+                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{result[1]}} บาท" disabled>
               </div>
         </div>
-            {% endfor %}
          
       </div>
       <!-- /.container-fluid -->
