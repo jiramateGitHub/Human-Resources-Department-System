@@ -7,16 +7,21 @@ from datetime import timedelta, datetime, tzinfo, date
 import pymysql
 
 app = Flask(__name__)
+
+#config ฐานข้อมูล
 conn = pymysql.connect('localhost','root','','hrdb')
 
+#หน้าแรก
 @app.route('/')
 def hello():
         return render_template('index.html')
 
+#หน้าหลัก
 @app.route('/home')
 def home():
         return render_template('index.html',) 
 
+#หน้าข้อมูลพนักงาน
 @app.route('/about-employee')
 def about_employee():
     with conn:
@@ -27,14 +32,22 @@ def about_employee():
         rows_count_employee = cur.fetchone()
         return render_template('about-employee.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
 
+#หน้าเกี่ยวกับเรา
 @app.route('/about_us')
 def about_us():
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT * from employee_wage")
-        rows = cur.fetchall()
-        return render_template('about-us.html',datas=rows)
+        cur.execute("SELECT COUNT(emp_id) as count from employee")
+        rows_count_employee = cur.fetchone()
+        cur.execute("SELECT COUNT(SUBSTRING(emp_fname, 1, 3)) as prefix FROM employee WHERE SUBSTRING(emp_fname, 1, 3) = 'นาย'")
+        rows_count_employee_male = cur.fetchone()
+        cur.execute("SELECT COUNT(SUBSTRING(emp_fname, 1, 3)) as prefix FROM employee WHERE SUBSTRING(emp_fname, 1, 3) = 'น.ส'")
+        rows_count_employee_female = cur.fetchone()
+        cur.execute("SELECT COUNT(SUBSTRING(emp_fname, 1, 3)) as prefix FROM employee WHERE SUBSTRING(emp_fname, 1, 3) = 'นาง'")
+        rows_count_employee_female2 = cur.fetchone()
+        return render_template('about-us.html',count_employee=rows_count_employee,count_employee_male=rows_count_employee_male,count_employee_female=rows_count_employee_female,count_employee_female2=rows_count_employee_female2)
 
+#หน้าบันทึกเวลาเข้า-ออก
 @app.route('/time_log')
 def time_log():
         with conn:
@@ -46,6 +59,7 @@ def time_log():
             times = ( timedelta(seconds=28800),timedelta(seconds=61200))
         return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=date.today(),select_cur_date=date.today())
 
+#หน้าบันทึกเวลาเข้า-ออก แบบค้นหาตามวันที่
 @app.route('/time_log_search',methods=['POST'])
 def time_log_search():
         empw_date = request.form['empw_date']
@@ -58,18 +72,23 @@ def time_log_search():
             times = ( timedelta(seconds=28800),timedelta(seconds=61200))
         return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=empw_date,select_cur_date=date.today())
 
+#หน้าคำนวณเงินเดือน
 @app.route('/calculate_salary')
 def calculate_salary():
-    with conn:
+     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT * from employee_wage")
-        rows = cur.fetchall()
-        return render_template('calculate_salary.html',datas=rows)
-
+        cur.execute("SELECT * from employee")
+        rows_rs_employee = cur.fetchall()
+        cur.execute("SELECT COUNT(emp_id) as count from employee")
+        rows_count_employee = cur.fetchone()
+        return render_template('calculate-salary.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
+   
+#หน้าเพิ่มข้อมูลพนักงาน
 @app.route('/employee_input')
 def employee_input():
     return render_template('employee-input.html')
 
+#ฟังก์ชันเพิ่มข้อมูลพนักงาน บันทึกลงฐานข้อมูล
 @app.route('/employee_insert',methods=['POST'])
 def employee_insert():
     if request.method == "POST":
@@ -84,6 +103,7 @@ def employee_insert():
             conn.commit()
         return redirect(url_for('about_employee'))    
 
+#ฟังก์ชันลบข้อมูลพนักงาน ลบออกจากฐานข้อมูล
 @app.route('/employee_delete/<string:id_data>',methods=['GET'])
 def employee_delete(id_data):
     with conn.cursor() as cur:
@@ -91,6 +111,7 @@ def employee_delete(id_data):
         conn.commit()
     return redirect(url_for('about_employee')) 
 
+#ฟังก์ชันแก้ไขข้อมูลพนักงาน บันทึกลงฐานข้อมูล
 @app.route('/employee_update',methods=['POST'])
 def employee_update():
     if request.method == "POST":
@@ -105,7 +126,6 @@ def employee_update():
             cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone,emp_id))
             conn.commit()
         return redirect(url_for('about_employee'))  
-
 
 if __name__ == "__main__":
     app.run(debug=True)
