@@ -125,10 +125,69 @@
                     <td>{{row.4}}</td>
                     <td>{{row.5}}</td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-secondary"><i class="fas fa-pen-square"></i></button>
+                        <a href="" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}"><i class="fas fa-pen-square"></i></a>
                         <a href="/employee_delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')"><i class="fas fa-times-circle"></i></a>
                     </td>
                   </tr>
+                  <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">อัพเดทข้อมูลของท่าน</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                            </div>
+                            <div class="modal-body">
+                              <form action="{{ url_for('employee_update') }}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">รหัสพนักงาน</span>
+                                            </div>
+                                            <input type="hidden" name="emp_id" value="{{row.0}}">
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_empid" value="{{row.1}}">
+                                        </div>
+                                      <br>
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">ชื่อ</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.2}}">
+                                        </div>
+                                        <br>
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">นามสกุล</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_lname" value="{{row.3}}">
+                                        </div>
+                                        <br>
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text">ที่อยู่</span>
+                                            </div>
+                                            <textarea class="form-control" aria-label="With textarea" name="emp_address" >{{row.4}}</textarea>
+                                        </div>
+                                        <br>
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์โทร</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_phone" value="{{row.5}}">
+                                        </div>
+                                        <br>
+                                        <div class="input-group col-md-12">
+                                            <button type="submit" class="pull-right btn btn-success ">บันทึกข้อมูล</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                   {% endfor %}
                  
                 </tbody>
