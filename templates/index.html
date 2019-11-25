@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB Admin - Dashboard</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="https://blackrockdigital.github.io/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+
+</head>
+<body id="page-top">
+
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <a class="navbar-brand mr-1" href="index.html">ฝ่ายทรัพยากรบุคคล</a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+      <i class="fas fa-bars"></i>
+    </button>
+
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="sidebar navbar-nav">
+      <li class="nav-item active">
+          <a class="nav-link" href="{{url_for('home')}}">
+          <i class="fas fa-fw fa-home"></i>
+          <span>หน้าหลัก</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('about_employee')}}">
+          <i class="fas fa-address-book"></i>
+          <span>ข้อมูลพนักงาน</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('time_log')}}">
+          <i class="fas fa-fw fa-table"></i>
+          <span>บันทึกเวลาเข้า-ออก</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('calculate_salary')}}">
+          <i class="fas fa-fw fa-coins"></i>
+          <span>คำนวณเงินเดือน</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('about_us')}}">
+          <i class="fas fa-fw fa-address-card"></i>
+          <span>เกี่ยวกับเรา</span></a>
+      </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+        <img src="https://www.peoplehr.com/blog/wp-content/uploads/2017/02/featuredsmalla-13.png" class="img-fluid img-thumbnail" alt="Responsive image">
+
+         <!-- Page Content -->
+         <h1>ข่าวสาร</h1>
+         <hr>
+         <p>รับสมัครพนักงานตำแหน่ง Production Planner ในส่วนการผลิต</p>
+         <p>วุฒิการศึกษา ปริญญาตรี สาขาวิศวกรรมอุตสาหการ</p>
+         <p>สมัครและติดต่อได้ที่ 020-7382120</p>
+ 
+      </div>
+      <!-- /.container-fluid -->
+
+      <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Your Website 2019</span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/jquery/jquery.min.js"></script>
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Page level plugin JavaScript-->
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/chart.js/Chart.min.js"></script>
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/datatables/jquery.dataTables.js"></script>
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/js/sb-admin.min.js"></script>
+
+  <!-- Demo scripts for this page-->
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/js/demo/datatables-demo.js"></script>
+  <script src="https://blackrockdigital.github.io/startbootstrap-sb-admin/js/demo/chart-area-demo.js"></script>
+
+</body>
+
+</html>
