@@ -3,8 +3,10 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import jsonify
 from datetime import timedelta, datetime, tzinfo, date
 import pymysql
+import json
 
 app = Flask(__name__)
 
@@ -77,14 +79,29 @@ def time_log_search():
 def calculate_salary():
      with conn:
         cur = conn.cursor()
-        cur.execute("SELECT * from employee")
+        cur.execute("SELECT * from employee LEFT JOIN employee_department ON empdp_empid = emp_empid")
         rows_rs_employee = cur.fetchall()
         cur.execute("SELECT COUNT(emp_id) as count from employee")
         rows_count_employee = cur.fetchone()
         return render_template('calculate-salary.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
-   
+        
+
+#ฟังก์ชันค้นหาวันที่ ของหน้าคำนวณเงินเดือน
+@app.route('/calculate_salary_search',methods=['POST'])
+def calculate_salary_search():
+    if request.method == "POST":
+        date_start = request.form['date_start']
+        date_end = request.form['date_end']
+        emp_empid = request.form['emp_empid']
+        with conn:
+            cur = conn.cursor()
+            sql="SELECT SUM(empt_wage) as empt_wage,  DATEADD(ms, SUM(DATEDIFF(ms, '00:00:00.000', empt_hr)), '00:00:00.000') as time   from employee LEFT JOIN employee_department ON empdp_empid = emp_empid LEFT JOIN employee_wage ON empl_empid = emp_empid LEFT JOIN employee_log_time ON empw_empid = empl_empid WHERE empt_date BETWEEN '"+date_start+"' AND '"+date_end+"' AND emp_empid = %s"
+            cur.execute(sql,(emp_empid))
+            result = cur.fetchall()
+            return render_template('calculate-salary-search.html',result=result)
+
 #หน้าเพิ่มข้อมูลพนักงาน
-@app.route('/employee_input')
+@app.route('/employee_input')   
 def employee_input():
     return render_template('employee-input.html')
 

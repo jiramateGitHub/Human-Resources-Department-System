@@ -43,7 +43,7 @@
           <span>หน้าหลัก</span>
         </a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="{{url_for('about_employee')}}">
           <i class="fas fa-address-book"></i>
           <span>ข้อมูลพนักงาน</span></a>
@@ -53,7 +53,7 @@
           <i class="fas fa-fw fa-table"></i>
           <span>บันทึกเวลาเข้า-ออก</span></a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active" >
         <a class="nav-link" href="{{url_for('calculate_salary')}}">
           <i class="fas fa-fw fa-coins"></i>
           <span>คำนวณเงินเดือน</span></a>
@@ -75,52 +75,28 @@
                 <a href="#">ฝ่ายทรัพยากรบุคคล</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{url_for('about_employee')}}">ข้อมูลพนักงาน</a>
+                <a href="{{url_for('calculate_salary')}}">คำนวณเงินเดือน</a>
             </li>
-            <li class="breadcrumb-item active">เพิ่มข้อมูลพนักงาน</li>
+            <li class="breadcrumb-item active">เงินเดือน</li>
         </ol>
-
+        {%  for row in result %}
          <!-- Page Content -->
-         <form action="{{ url_for('employee_insert') }}" method="post">
-          <div class="form-group">
-              <div class="input-group col-md-5">
+         <div class="form-group">
+              <div class="input-group col-md-12">
                   <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">รหัสพนักงาน</span>
+                      <span class="input-group-text" id="inputGroup-sizing-sm">รวม</span>
                   </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_empid">
-              </div>
-            <br>
-              <div class="input-group col-md-5">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">ชื่อ</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname">
+                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.1}} ชั่วโมง" disabled>
               </div>
               <br>
-              <div class="input-group col-md-5">
+              <div class="input-group col-md-12">
                   <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">นามสกุล</span>
+                      <span class="input-group-text" id="inputGroup-sizing-sm">เงินเดือน</span>
                   </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_lname">
+                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.0}} บาท" disabled>
               </div>
-              <br>
-              <div class="input-group col-md-5">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">ที่อยู่</span>
-                  </div>
-                  <textarea class="form-control" aria-label="With textarea" name="emp_address"></textarea>
-              </div>
-              <br>
-              <div class="input-group col-md-5">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์โทร</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_phone">
-              </div>
-              <br>
-              <button type="submit" class="pull-right btn btn-success ">บันทึกข้อมูล</button>
-          </div>
-        </form>
+        </div>
+            {% endfor %}
          
       </div>
       <!-- /.container-fluid -->

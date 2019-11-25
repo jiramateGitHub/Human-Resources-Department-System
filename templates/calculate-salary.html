@@ -116,26 +116,41 @@
 
                           </div>
                           <div class="modal-body">
-                            <form action="{{ url_for('employee_update') }}" method="post">
-                                  <div class="form-group">
-                                      <div class="input-group col-md-12">
-                                          <div class="input-group-prepend">
-                                              <span class="input-group-text" id="inputGroup-sizing-sm">รหัสพนักงาน</span>
-                                          </div>
-                                          <input type="hidden" name="emp_id" value="{{row.0}}">
-                                          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_empid" value="{{row.1}}" disabled>
-                                      </div>
-                                    <br>
-                                      <div class="input-group col-md-12">
-                                          <div class="input-group-prepend">
-                                              <span class="input-group-text" id="inputGroup-sizing-sm">ชื่อ</span>
-                                          </div>
-                                          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{row.2 + ' ' + row.3}}" disabled>
-                                      </div>
-                                      <br>
-                                     
+                            <div class="form-group">
+                                <div class="input-group col-md-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">รหัสพนักงาน</span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{row.1}}" disabled>
+                                </div>
+                              <br>
+                              <div class="input-group col-md-12">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text" id="inputGroup-sizing-sm">ชื่อ</span>
                                   </div>
-                              </form>
+                                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  value="{{row.2 + ' ' + row.3}}" disabled>
+                              </div>
+                              <br>
+                              <div class="input-group col-md-12">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text" id="inputGroup-sizing-sm">ฝ่าย/ตำแหน่ง</span>
+                                  </div>
+                                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  value="{{row.8 + ' / ' + row.9}}" disabled>
+                              </div>
+                              <hr>
+                              <div class="input-group col-md-12">
+                                  <form action="{{ url_for('calculate_salary_search') }}" method="post">
+                                    <input type="hidden" name="emp_empid" value="{{row.1}}">
+                                    <input type="date" class="form-control" name="date_start" >
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                    </div>
+                                    <input type="date" class="form-control" name="date_end" >&nbsp;
+                                    <button type="submit" class="btn btn-primary" >ค้นหา</button>
+                                  </form>
+                              </div>
+                              <br>
+                            </div>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
