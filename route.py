@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import redirect
 from flask import url_for
 from datetime import timedelta, datetime, tzinfo
 import pymysql
@@ -55,6 +56,30 @@ def calculate_salary():
         rows = cur.fetchall()
         return render_template('calculate_salary.html',datas=rows)
 
+@app.route('/employee_input')
+def employee_input():
+    return render_template('employee-input.html')
+
+@app.route('/employee_insert',methods=['POST'])
+def employee_insert():
+    if request.method == "POST":
+        emp_empid = request.form['emp_empid']
+        emp_fname = request.form['emp_fname']
+        emp_lname = request.form['emp_lname']
+        emp_address = request.form['emp_address']
+        emp_phone = request.form['emp_phone']
+        with conn.cursor() as cur:
+            sql="Insert into employee (emp_empid,emp_fname,emp_lname,emp_address,emp_phone) values(%s,%s,%s,%s,%s)"
+            cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone))
+            conn.commit()
+        return redirect(url_for('about_employee'))    
+
+@app.route('/employee_delete/<string:id_data>',methods=['GET'])
+def employee_delete(id_data):
+    with conn.cursor() as cur:
+        cur.execute("Delete from employee where emp_id = %s",(id_data))
+        conn.commit()
+    return redirect(url_for('about_employee'))    
 
 if __name__ == "__main__":
     app.run(debug=True)
