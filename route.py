@@ -7,22 +7,22 @@ from flask import jsonify
 from datetime import timedelta, datetime, tzinfo, date
 import pymysql
 import sys
-
+#########################################################################################################################################################################
 app = Flask(__name__)
-
+#########################################################################################################################################################################
 #config ฐานข้อมูล
 conn = pymysql.connect('localhost','root','','hrdb')
-
+#########################################################################################################################################################################
 #หน้าแรก
 @app.route('/')
 def hello():
         return render_template('index.html')
-
+#########################################################################################################################################################################
 #หน้าหลัก
 @app.route('/home')
 def home():
         return render_template('index.html',) 
-
+#########################################################################################################################################################################
 #หน้าข้อมูลพนักงาน
 @app.route('/about-employee')
 def about_employee():
@@ -35,7 +35,7 @@ def about_employee():
         rows_count_employee = cur.fetchone()
 
     return render_template('about-employee.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
-
+#########################################################################################################################################################################
 #หน้าเกี่ยวกับเรา
 @app.route('/about_us')
 def about_us():
@@ -54,7 +54,7 @@ def about_us():
         rows_count_employee_female2 = cur.fetchone()
 
     return render_template('about-us.html',count_employee=rows_count_employee,count_employee_male=rows_count_employee_male,count_employee_female=rows_count_employee_female,count_employee_female2=rows_count_employee_female2)
-
+#########################################################################################################################################################################
 #หน้าบันทึกเวลาเข้า-ออก
 @app.route('/time_log')
 def time_log():
@@ -69,7 +69,7 @@ def time_log():
         times = ( timedelta(seconds=28800),timedelta(seconds=61200))
 
     return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=date.today(),select_cur_date=date.today())
-
+#########################################################################################################################################################################
 #หน้าบันทึกเวลาเข้า-ออก แบบค้นหาตามวันที่
 @app.route('/time_log_search',methods=['POST'])
 def time_log_search():
@@ -85,7 +85,7 @@ def time_log_search():
         times = ( timedelta(seconds=28800),timedelta(seconds=61200))
 
     return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=empw_date,select_cur_date=date.today())
-
+#########################################################################################################################################################################
 #หน้าคำนวณเงินเดือน
 @app.route('/calculate_salary')
 def calculate_salary():
@@ -96,7 +96,7 @@ def calculate_salary():
         cur.execute("SELECT COUNT(emp_id) as count from employee")
         rows_count_employee = cur.fetchone()
     return render_template('calculate-salary.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
-
+#########################################################################################################################################################################
 #ฟังก์ชันค้นหาวันที่ ของหน้าคำนวณเงินเดือน
 @app.route('/calculate_salary_search',methods=['POST'])
 def calculate_salary_search():
@@ -110,12 +110,12 @@ def calculate_salary_search():
             cur.execute(sql)
             result = cur.fetchone()
         return render_template('calculate-salary-search.html',result=result)
-
+#########################################################################################################################################################################
 #หน้าเพิ่มข้อมูลพนักงาน
 @app.route('/employee_input')   
 def employee_input():
     return render_template('employee-input.html')
-
+#########################################################################################################################################################################
 #ฟังก์ชันเพิ่มข้อมูลพนักงาน บันทึกลงฐานข้อมูล
 @app.route('/employee_insert',methods=['POST'])
 def employee_insert():
@@ -131,7 +131,7 @@ def employee_insert():
             cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone))
             conn.commit()
         return redirect(url_for('about_employee'))    
-
+#########################################################################################################################################################################
 #ฟังก์ชันลบข้อมูลพนักงาน ลบออกจากฐานข้อมูล
 @app.route('/employee_delete/<string:id_data>',methods=['GET'])
 def employee_delete(id_data):
@@ -139,7 +139,7 @@ def employee_delete(id_data):
         cur.execute("Delete from employee where emp_id = %s",(id_data))
         conn.commit()
     return redirect(url_for('about_employee')) 
-
+#########################################################################################################################################################################
 #ฟังก์ชันแก้ไขข้อมูลพนักงาน บันทึกลงฐานข้อมูล
 @app.route('/employee_update',methods=['POST'])
 def employee_update():
@@ -156,6 +156,6 @@ def employee_update():
             cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone,emp_id))
             conn.commit()
         return redirect(url_for('about_employee'))  
-
+#########################################################################################################################################################################
 if __name__ == "__main__":
     app.run(debug=True)
