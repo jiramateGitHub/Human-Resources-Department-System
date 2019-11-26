@@ -21,19 +21,16 @@ def hello():
 #หน้าหลัก
 @app.route('/home')
 def home():
-        return render_template('index.html',) 
+        return render_template('index.html') 
 #########################################################################################################################################################################
 #หน้าข้อมูลพนักงาน
 @app.route('/about-employee')
 def about_employee():
     with conn.cursor() as cur:
-
-        cur.execute("SELECT * from employee")
+        cur.execute("SELECT * from employee LEFT JOIN employee_department ON emp_empid = empdp_empid")
         rows_rs_employee = cur.fetchall()
-
         cur.execute("SELECT COUNT(emp_id) as count from employee")
         rows_count_employee = cur.fetchone()
-
     return render_template('about-employee.html',rs_employee=rows_rs_employee,count_employee=rows_count_employee)
 #########################################################################################################################################################################
 #หน้าเกี่ยวกับเรา
@@ -59,16 +56,10 @@ def about_us():
 @app.route('/time_log')
 def time_log():
     with conn.cursor() as cur:
-
-        cur.execute("SELECT * FROM employee_log_time LEFT JOIN employee_take_leave ON emptl_empid = empw_empid WHERE empw_date = CURDATE()")
+        cur.execute("SELECT * FROM employee LEFT JOIN employee_log_time ON empw_empid = emp_empid WHERE empw_date = CURDATE()")
         rows_rs_employee = cur.fetchall()
-
-        cur.execute("SELECT DISTINCT empw_date FROM employee_log_time")
-        rows_rs_date = cur.fetchall()
-
         times = ( timedelta(seconds=28800),timedelta(seconds=61200))
-
-    return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=date.today(),select_cur_date=date.today())
+    return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,cur_date=date.today())
 #########################################################################################################################################################################
 #หน้าบันทึกเวลาเข้า-ออก แบบค้นหาตามวันที่
 @app.route('/time_log_search',methods=['POST'])
@@ -76,21 +67,18 @@ def time_log_search():
     empw_date = request.form['empw_date']
     with conn.cursor() as cur:
 
-        cur.execute("SELECT * FROM employee_log_time LEFT JOIN employee_take_leave ON emptl_empid = empw_empid WHERE empw_date = %s",(empw_date))
+        cur.execute("SELECT * FROM employee LEFT JOIN employee_log_time ON empw_empid = emp_empid WHERE empw_date = %s",(empw_date))
         rows_rs_employee = cur.fetchall()
-
-        cur.execute("SELECT DISTINCT empw_date FROM employee_log_time")
-        rows_rs_date = cur.fetchall()
 
         times = ( timedelta(seconds=28800),timedelta(seconds=61200))
 
-    return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,rows_rs_date=rows_rs_date,cur_date=empw_date,select_cur_date=date.today())
+    return render_template('time-log.html',rows_rs_employee=rows_rs_employee,times=times,cur_date=empw_date)
 #########################################################################################################################################################################
 #หน้าคำนวณเงินเดือน
 @app.route('/calculate_salary')
 def calculate_salary():
     with conn.cursor() as cur:
-        cur.execute("SELECT * from employee LEFT JOIN employee_department ON empdp_empid = emp_empid")
+        cur.execute("SELECT * from employee LEFT JOIN employee_department ON emp_empid = empdp_empid")
         rows_rs_employee = cur.fetchall()
 
         cur.execute("SELECT COUNT(emp_id) as count from employee")
@@ -125,18 +113,25 @@ def employee_insert():
         emp_lname = request.form['emp_lname']
         emp_address = request.form['emp_address']
         emp_phone = request.form['emp_phone']
+        empdp_department = request.form['empdp_department']
+        empdp_position = request.form['empdp_position']
 
         with conn.cursor() as cur:
             sql="Insert into employee (emp_empid,emp_fname,emp_lname,emp_address,emp_phone) values(%s,%s,%s,%s,%s)"
             cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone))
             conn.commit()
+            sql="Insert into employee_department (empdp_empid,empdp_department,empdp_position) values(%s,%s,%s)"
+            cur.execute(sql,(emp_empid,empdp_department,empdp_position))
+            conn.commit()
         return redirect(url_for('about_employee'))    
 #########################################################################################################################################################################
 #ฟังก์ชันลบข้อมูลพนักงาน ลบออกจากฐานข้อมูล
-@app.route('/employee_delete/<string:id_data>',methods=['GET'])
-def employee_delete(id_data):
+@app.route('/employee_delete/<string:empid>',methods=['GET'])
+def employee_delete(empid):
     with conn.cursor() as cur:
-        cur.execute("Delete from employee where emp_id = %s",(id_data))
+        cur.execute("Delete from employee where emp_empid = %s",(empid))
+        conn.commit()
+        cur.execute("Delete from employee_department where empdp_empid = %s",(empid))
         conn.commit()
     return redirect(url_for('about_employee')) 
 #########################################################################################################################################################################
@@ -150,12 +145,62 @@ def employee_update():
         emp_lname = request.form['emp_lname']
         emp_address = request.form['emp_address']
         emp_phone = request.form['emp_phone']
+        empdp_department = request.form['empdp_department']
+        empdp_position = request.form['empdp_position']
 
         with conn.cursor() as cur:
             sql="UPDATE employee SET emp_empid=%s,emp_fname=%s,emp_lname=%s,emp_address=%s,emp_phone=%s WHERE emp_id = %s"
             cur.execute(sql,(emp_empid,emp_fname,emp_lname,emp_address,emp_phone,emp_id))
             conn.commit()
+
+            sql="UPDATE employee_department SET empdp_empid=%s,empdp_department=%s,empdp_position=%s WHERE empdp_empid = %s"
+            cur.execute(sql,(emp_empid,empdp_department,empdp_position,emp_empid))
+            conn.commit()
         return redirect(url_for('about_employee'))  
+#########################################################################################################################################################################
+#หน้าเพิ่มข้อมูลพนักงาน
+@app.route('/timelog_input')   
+def timelog_input():
+    with conn.cursor() as cur:
+        cur.execute("SELECT emp_empid ,emp_fname ,emp_lname, empdp_department, empdp_position from employee LEFT JOIN employee_department ON empdp_empid = emp_empid")
+        rows_rs_select_employee = cur.fetchall()
+    return render_template('timelog-input.html',select_employee=rows_rs_select_employee)
+#########################################################################################################################################################################
+#ฟังก์ชันเพิ่มข้อมูลพนักงาน บันทึกลงฐานข้อมูล
+@app.route('/timelog_insert',methods=['POST'])
+def timelog_insert():
+    if request.method == "POST":
+        emp_empid = request.form['emp_empid']
+        emp_name = request.form['emp_name']
+        emp_date = request.form['emp_date']
+        emp_time_in = request.form['emp_time_in']
+        emp_time_out = request.form['emp_time_out']
+        emp_code = request.form['emp_code']
+
+        hour_in, minute_in = map(int, emp_time_in.split(':'))
+        emp_time_in = timedelta(hours=hour_in, minutes =minute_in)
+      
+        hour_out, minute_out = map(int, emp_time_out.split(':'))
+        emp_time_out = timedelta(hours=hour_out, minutes =minute_out)
+
+        emp_sum_hr = emp_time_out - emp_time_in
+        if emp_time_out >= timedelta(seconds=61200):
+            emp_ot = emp_time_out - timedelta(seconds=61200)
+        else:
+            emp_ot = timedelta(seconds=0)
+
+        emp_time_work = emp_sum_hr + emp_ot
+        emp_wage = emp_time_work * 50
+
+        with conn.cursor() as cur:
+            sql="Insert into employee_log_time (empw_code,empw_empid,empw_name,empw_time_in,empw_time_out,empw_sum_hr,empw_ot,empw_date) values(%s,%s,%s,%s,%s,%s,%s,%s)"
+            cur.execute(sql,(emp_code,emp_empid,emp_name,emp_time_in,emp_time_out,emp_sum_hr,emp_ot,emp_date))
+            conn.commit()
+
+            sql="Insert into employee_wage (empt_no,empl_empid,empt_name,empt_hr,empt_wage,empt_date) values(%s,%s,%s,%s,%s,%s)"
+            cur.execute(sql,(emp_code,emp_empid,emp_name,emp_time_work,emp_wage,emp_date))
+            conn.commit()
+        return redirect(url_for('time_log'))    
 #########################################################################################################################################################################
 if __name__ == "__main__":
     app.run(debug=True)

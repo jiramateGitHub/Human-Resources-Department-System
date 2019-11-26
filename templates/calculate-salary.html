@@ -89,21 +89,23 @@
                 <thead>
                   <tr class="text-center">
                     <th>รหัสพนักงาน</th>
-                    <th>ชื่อ</th>
-                    <th>นามสกุล</th>
+                    <th>ชื่อ-นามสกุล</th>
                     <th>ที่อยู่</th>
                     <th>เบอร์โทร</th>
+                    <th>แผนก</th>
+                    <th>ตำแหน่ง</th>
                     <th>การดำเนินการ</th>
                   </tr>
                 </thead>
                 <tbody>
                   {%  for row in rs_employee %}
                   <tr>
-                    <td>{{row.1}}</td>
-                    <td>{{row.2}}</td>
-                    <td>{{row.3}}</td>
+                    <td class="text-center">{{row.1}}</td>
+                    <td>{{row.2}} {{row.3}}</td>
                     <td>{{row.4}}</td>
-                    <td>{{row.5}}</td>
+                    <td class="text-center">{{row.5}}</td>
+                    <td>{{row.8}}</td>
+                    <td>{{row.9}}</td>
                     <td class="text-center">
                         <a href="" data-toggle="modal" data-target="#modaledit{{row.0}}" class="btn btn-secondary btn-xs" ><i class="fas fa-calculator"></i></a>
                     </td>

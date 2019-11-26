@@ -94,7 +94,6 @@
             </div> 
         </div>
 
-       
         <a href="{{url_for('employee_input')}}" class="btn btn-primary">เพิ่มพนักงาน</a>
         <br>
         <br>
@@ -109,24 +108,26 @@
                 <thead>
                   <tr class="text-center">
                     <th>รหัสพนักงาน</th>
-                    <th>ชื่อ</th>
-                    <th>นามสกุล</th>
+                    <th>ชื่อ-นามสกุล</th>
                     <th>ที่อยู่</th>
                     <th>เบอร์โทร</th>
+                    <th>แผนก</th>
+                    <th>ตำแหน่ง</th>
                     <th>การดำเนินการ</th>
                   </tr>
                 </thead>
                 <tbody>
                   {%  for row in rs_employee %}
                   <tr>
-                    <td>{{row.1}}</td>
-                    <td>{{row.2}}</td>
-                    <td>{{row.3}}</td>
+                    <td class="text-center">{{row.1}}</td>
+                    <td>{{row.2}} {{row.3}}</td>
                     <td>{{row.4}}</td>
-                    <td>{{row.5}}</td>
+                    <td class="text-center">{{row.5}}</td>
+                    <td>{{row.8}}</td>
+                    <td>{{row.9}}</td>
                     <td class="text-center">
                         <a href="" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}"><i class="fas fa-pen-square"></i></a>
-                        <a href="/employee_delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')"><i class="fas fa-times-circle"></i></a>
+                        <a href="/employee_delete/{{ row.1 }}" class="btn btn-danger btn-xs" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่?')"><i class="fas fa-times-circle"></i></a>
                     </td>
                   </tr>
                   <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
@@ -174,6 +175,20 @@
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์โทร</span>
                                             </div>
                                             <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_phone" value="{{row.5}}">
+                                        </div>
+                                        <br>
+                                        <div class="input-group col-md-12">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="inputGroup-sizing-sm">แผนก</span>
+                                          </div>
+                                          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="empdp_department" value="{{row.8}}">
+                                        </div>
+                                          <br>
+                                        <div class="input-group col-md-12">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">ตำแหน่ง</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="empdp_position" value="{{row.9}}">
                                         </div>
                                         <br>
                                         <div class="input-group col-md-12">
