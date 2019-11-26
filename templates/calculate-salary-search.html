@@ -119,14 +119,22 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">รวม</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname"value="{{(rows_rs_wage[0].total_seconds()) / 3600}} ชั่วโมง" disabled>
+                    {% if rows_rs_wage[0] == "0" %}
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name=""value="0 ชั่วโมง" disabled>
+                    {% else %}
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name=""value="{{(rows_rs_wage[0].total_seconds()) / 3600}} ชั่วโมง" disabled>
+                    {% endif %}
                 </div>
                 <br>
                 <div class="input-group col-md-12">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">เงินเดือน</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname" value="{{rows_rs_wage[1]}} บาท" disabled>
+                    {% if rows_rs_wage[0] == "0" %}
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name=""value="0 บาท" disabled>
+                    {% else %}
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="" value="{{rows_rs_wage[1]}} บาท" disabled>
+                    {% endif %}
                 </div>
             </div>
           </div>
