@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2019 at 06:45 AM
+-- Generation Time: Nov 26, 2019 at 04:05 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.1.33
 
@@ -42,7 +42,6 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`emp_id`, `emp_empid`, `emp_fname`, `emp_lname`, `emp_address`, `emp_phone`) VALUES
-(1, 1287, 'น.ส.ชุติกาน์', 'จรกา', 'นคราชสีมา', '090-9846161'),
 (2, 1300, 'นายเดชาธร', 'นารถสูง', 'ขอนแก่น', '091-0656644'),
 (3, 1318, 'นายธราธร', 'ทองหอม', 'บุรีรัมย์', '090-4138202'),
 (4, 1326, 'นายธราธร', 'ทองโคตร', 'ขอนแก่น', '093-3264186'),
@@ -91,7 +90,8 @@ INSERT INTO `employee` (`emp_id`, `emp_empid`, `emp_fname`, `emp_lname`, `emp_ad
 (47, 4577, 'นายเจษฎา', 'ทิมลาย', 'กำแพงเพชร', '098-2314562'),
 (48, 4578, 'นายแดง', 'อนุพันธ์', 'หนองบัวลำภู', '092-6748967'),
 (49, 4579, 'นายดิเรก', 'อนุเปโถ ', 'ยโสธร', '096-2467758'),
-(50, 4580, 'นายสนิท', 'หนูแก้ว', 'หนองคาย', '099-4797563');
+(50, 4580, 'นายสนิท', 'หนูแก้ว', 'หนองคาย', '099-4797563'),
+(76, 12, 'Jiramate', 'Phuaphan', '2/26\r\n-', '0847810462');
 
 -- --------------------------------------------------------
 
@@ -111,7 +111,6 @@ CREATE TABLE `employee_department` (
 --
 
 INSERT INTO `employee_department` (`empdp_id`, `empdp_empid`, `empdp_department`, `empdp_position`) VALUES
-(1, 1287, 'บัญชี', 'เจ้าหน้าที่บัญชีต้นทุน'),
 (4581, 1300, 'บุคคล', 'เงินเดือน/สวัสดิการ'),
 (4582, 1318, 'การตลาด', 'นักวิเคราะห์'),
 (4583, 1326, 'จัดซื้อ', 'หัวหน้าแผนก'),
@@ -160,7 +159,8 @@ INSERT INTO `employee_department` (`empdp_id`, `empdp_empid`, `empdp_department`
 (4626, 4577, 'ผลิต', 'พนักงานคุมเครื่องจักร'),
 (4627, 4578, 'ผลิต', 'พนักงานคุมเครื่องจักร'),
 (4628, 4579, 'ผลิต', 'พนักงานบรรจุ'),
-(4629, 4580, 'ผลิต', 'พนักงานขนสินค้า');
+(4629, 4580, 'ผลิต', 'พนักงานขนสินค้า'),
+(4633, 12, '-', '-');
 
 -- --------------------------------------------------------
 
@@ -172,10 +172,6 @@ CREATE TABLE `employee_log_time` (
   `empw_id` int(11) NOT NULL,
   `empw_empid` int(11) NOT NULL COMMENT 'รหัสพนักงาน',
   `empw_name` varchar(255) NOT NULL COMMENT 'ชื่อผู้กรอก',
-  `empw_fname` varchar(255) NOT NULL COMMENT 'ชื่อ',
-  `empw_lname` varchar(255) NOT NULL COMMENT 'สกุล',
-  `empw_position` varchar(255) NOT NULL COMMENT 'ตำแหน่ง',
-  `empw_department` varchar(255) NOT NULL COMMENT 'แผนก',
   `empw_time_in` time NOT NULL DEFAULT current_timestamp() COMMENT 'เวลาเข้างาน',
   `empw_time_out` time NOT NULL DEFAULT current_timestamp() COMMENT 'เวลาออกงาน',
   `empw_sum_hr` time NOT NULL COMMENT 'ชั่วโมงงานทั้งหมด',
@@ -188,11 +184,12 @@ CREATE TABLE `employee_log_time` (
 -- Dumping data for table `employee_log_time`
 --
 
-INSERT INTO `employee_log_time` (`empw_id`, `empw_empid`, `empw_name`, `empw_fname`, `empw_lname`, `empw_position`, `empw_department`, `empw_time_in`, `empw_time_out`, `empw_sum_hr`, `empw_ot`, `empw_date`, `empw_code`) VALUES
-(1, 1334, 'กรกมล', 'นายธีรพัฒน์', 'ผ่องแผ้ว', 'หัวหน้าแผนก', 'ผลิต', '08:00:00', '19:00:00', '11:00:00', '02:30:00', '2019-05-26', 1),
-(2, 1326, 'กรกมล', 'นายธราธร', 'ทองหอม', 'นักวิเคราะห์', 'การตลาด', '09:00:00', '20:00:00', '11:00:00', '03:30:00', '2019-05-26', 1),
-(3, 1326, 'กรกมล', 'นายธราธร', 'ทองหอม', 'นักวิเคราะห์', 'การตลาด', '07:30:00', '19:00:00', '11:30:00', '02:30:00', '2019-05-27', 2),
-(4, 4579, 'กิติพงษ์', 'นายดิเรก', 'อนุเปโถ ', 'พนักงานบรรจุ', 'ผลิต', '07:00:00', '17:00:00', '10:00:00', '00:30:00', '2019-05-27', 1);
+INSERT INTO `employee_log_time` (`empw_id`, `empw_empid`, `empw_name`, `empw_time_in`, `empw_time_out`, `empw_sum_hr`, `empw_ot`, `empw_date`, `empw_code`) VALUES
+(1, 1334, 'กรกมล', '08:00:00', '19:00:00', '11:00:00', '02:30:00', '2019-05-26', 1),
+(2, 1326, 'กรกมล', '09:00:00', '20:00:00', '11:00:00', '03:30:00', '2019-05-26', 1),
+(3, 1326, 'กรกมล', '07:30:00', '19:00:00', '11:30:00', '02:30:00', '2019-05-27', 2),
+(4, 4579, 'กรกมล', '07:00:00', '17:00:00', '10:00:00', '00:30:00', '2019-05-27', 1),
+(9, 1300, 'Jiramate Phuaphan', '08:00:00', '20:00:00', '12:00:00', '03:00:00', '2019-11-26', 23);
 
 -- --------------------------------------------------------
 
@@ -346,10 +343,6 @@ CREATE TABLE `employee_wage` (
   `empl_empid` int(11) NOT NULL COMMENT 'รหัสพนักงาน',
   `empt_no` int(11) NOT NULL COMMENT 'สลิปเลขที่',
   `empt_name` varchar(255) NOT NULL COMMENT 'ชื่อผู้กรอก',
-  `empt_fname` varchar(255) NOT NULL COMMENT 'ชื่อ',
-  `empt_lname` varchar(255) NOT NULL COMMENT 'สกุล',
-  `empt_position` varchar(255) NOT NULL COMMENT 'ตำแหน่ง',
-  `empt_department` varchar(255) NOT NULL COMMENT 'แผนก',
   `empt_hr` time NOT NULL COMMENT 'ชม.ทำงาน',
   `empt_wage` float NOT NULL COMMENT 'ค่าจ้าง',
   `empt_date` date NOT NULL DEFAULT current_timestamp() COMMENT 'วันที่'
@@ -359,11 +352,12 @@ CREATE TABLE `employee_wage` (
 -- Dumping data for table `employee_wage`
 --
 
-INSERT INTO `employee_wage` (`empt_id`, `empl_empid`, `empt_no`, `empt_name`, `empt_fname`, `empt_lname`, `empt_position`, `empt_department`, `empt_hr`, `empt_wage`, `empt_date`) VALUES
-(1, 1326, 1, 'กรกมล', 'นายธราธร', 'ทองหอม', 'นักวิเคราะห์', 'การตลาด', '11:00:00', 550, '2019-05-26'),
-(4, 1334, 1, 'กรกมล', 'นายธีรพัฒน์', 'ผ่องแผ้ว', 'หัวหน้าแผนก', 'ผลิต', '11:00:00', 600, '2019-05-26'),
-(6, 1326, 2, 'กรกมล', 'นายธราธร', 'ทองหอม', 'นักวิเคราะห์', 'การตลาด', '11:30:00', 550, '2019-05-27'),
-(8, 4579, 1, 'กิติพงษ์', 'นายดิเรก', 'อนุเปโถ', 'พนักงานบรรจุ', 'ผลิต', '10:00:00', 550, '2019-05-27');
+INSERT INTO `employee_wage` (`empt_id`, `empl_empid`, `empt_no`, `empt_name`, `empt_hr`, `empt_wage`, `empt_date`) VALUES
+(1, 1326, 1, 'กรกมล', '11:00:00', 550, '2019-05-26'),
+(4, 1334, 1, 'กรกมล', '11:00:00', 600, '2019-05-26'),
+(6, 1326, 2, 'กรกมล', '11:30:00', 550, '2019-05-27'),
+(8, 4579, 1, 'กิติพงษ์', '10:00:00', 550, '2019-05-27'),
+(10, 1300, 23, 'Jiramate Phuaphan', '15:00:00', 750, '2019-11-26');
 
 -- --------------------------------------------------------
 
@@ -487,19 +481,19 @@ ALTER TABLE `employee_work day`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `employee_department`
 --
 ALTER TABLE `employee_department`
-  MODIFY `empdp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4630;
+  MODIFY `empdp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4634;
 
 --
 -- AUTO_INCREMENT for table `employee_log_time`
 --
 ALTER TABLE `employee_log_time`
-  MODIFY `empw_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `empw_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `employee_salary`
@@ -517,7 +511,7 @@ ALTER TABLE `employee_take_leave`
 -- AUTO_INCREMENT for table `employee_wage`
 --
 ALTER TABLE `employee_wage`
-  MODIFY `empt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `empt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `employee_work day`
