@@ -119,7 +119,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">รวม</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname"value="{{rows_rs_wage[0]}} ชั่วโมง" disabled>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="emp_fname"value="{{(rows_rs_wage[0].total_seconds()) / 3600}} ชั่วโมง" disabled>
                 </div>
                 <br>
                 <div class="input-group col-md-12">

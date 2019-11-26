@@ -99,7 +99,7 @@ def calculate_salary_search():
             cur.execute(sql)
             rows_rs_wage = cur.fetchone()
 
-            cur.execute("SELECT empw_date, empw_time_in, empw_time_out,empw_sum_hr,empw_ot FROM employee LEFT JOIN employee_log_time ON empw_empid = emp_empid WHERE emp_empid = %s AND empw_date BETWEEN '"+date_start+"' AND '"+date_end+"'",(emp_empid))
+            cur.execute("SELECT empw_date, empw_time_in, empw_time_out,empw_sum_hr,empw_ot FROM employee LEFT JOIN employee_log_time ON empw_empid = emp_empid WHERE emp_empid = %s AND empw_date BETWEEN '"+date_start+"' AND '"+date_end+"' ORDER BY empw_date ASC",(emp_empid))
             rows_rs_timelog = cur.fetchall()
         return render_template('calculate-salary-search.html',rows_rs_wage=rows_rs_wage,rows_rs_timelog=rows_rs_timelog)
 #########################################################################################################################################################################
