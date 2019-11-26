@@ -89,7 +89,7 @@ def time_log_search():
 #หน้าคำนวณเงินเดือน
 @app.route('/calculate_salary')
 def calculate_salary():
-     with conn.cursor() as cur:
+    with conn.cursor() as cur:
         cur.execute("SELECT * from employee LEFT JOIN employee_department ON empdp_empid = emp_empid")
         rows_rs_employee = cur.fetchall()
 
